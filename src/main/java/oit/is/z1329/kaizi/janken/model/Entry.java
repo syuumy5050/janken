@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Entry {
   ArrayList<String> users = new ArrayList<>();
+  int userCnt = 0;
 
   public void addUser(String name) {
     // 同名のユーザが居たら何もせずにreturn
@@ -17,6 +18,7 @@ public class Entry {
     }
     // 同名のユーザが居なかった場合はusersにnameを追加する
     this.users.add(name);
+    userCnt = users.size();
   }
 
   // 以降はフィールドのgetter/setter
@@ -27,6 +29,14 @@ public class Entry {
 
   public void setUsers(ArrayList<String> users) {
     this.users = users;
+  }
+
+  public int getUserCnt() {
+    return userCnt;
+  }
+
+  public void setUserCnt(int userCnt) {
+    this.userCnt = userCnt;
   }
 
 }

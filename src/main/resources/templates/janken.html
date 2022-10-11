@@ -14,6 +14,7 @@
   <div th:if="${entry}">
     エントリー
     <ul>
+      <li>今[[${entry.userCnt}]]人がエントリーしています</li>
       <li th:each="user : ${entry.users}">[[${user}]]</li>
     </ul>
   </div>

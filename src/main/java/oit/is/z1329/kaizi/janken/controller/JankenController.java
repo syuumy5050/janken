@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import oit.is.z1329.kaizi.janken.model.Janken;
+import oit.is.z1329.kaizi.janken.model.Match;
+import oit.is.z1329.kaizi.janken.model.MatchMapper;
 import oit.is.z1329.kaizi.janken.model.User;
 import oit.is.z1329.kaizi.janken.model.UserMapper;
 import oit.is.z1329.kaizi.janken.model.Entry;
@@ -20,13 +22,19 @@ public class JankenController {
 
   @Autowired
   Entry entry;
+
   @Autowired
   UserMapper userMapper;
+
+  @Autowired
+  MatchMapper matchMapper;
 
   @GetMapping("/janken")
   public String janken_get(ModelMap model) {
     ArrayList<User> users = userMapper.selectAllUser();
+    ArrayList<Match> matches = matchMapper.selectAllMatches();
     model.addAttribute("users", users);
+    model.addAttribute("matches", matches);
     return "janken.html";
   }
 

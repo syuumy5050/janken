@@ -19,8 +19,21 @@
   <h2>エントリー</h2>
   <div>今[[${users.size()}]]人がエントリーしています</div>
   <ul>
-    <li th:each="user : ${users}">[[${user.name}]]</li>
+    <li th:each="user:${users}">[[${user.name}]]</li>
   </ul>
+  </p>
+
+  <p th:if="${matches}">
+  <h2>試合結果</h2>
+  <div th:each="match:${matches}">
+    <tr>
+      <td>id:[[${match.id}]]</td>
+      <td>user1:[[${match.user1}]]</td>
+      <td>user2:[[${match.user2}]]</td>
+      <td>user1の手:[[${match.user1Hand}]]</td>
+      <td>user2の手:[[${match.user2Hand}]]</td>
+    </tr>
+  </div>
   </p>
 
   <p>
@@ -28,6 +41,7 @@
     <a href="/jankengame?hand=Tyoki">ちょき</a>
     <a href="/jankengame?hand=Pa">ぱー</a>
   </p>
+
   <div th:if="${janken}">
     <div>あなたの手 [[${janken.getUserHand()}]]</div>
     <div>相手の手 [[${janken.getEnemyHand()}]]</div>

@@ -15,17 +15,19 @@
     <span sec:authentication="name" /> V.S. <span th:if="${user2}">[[${user2.name}]]</span>
   </h2>
 
-  <p>
-    <a href="/jankengame?hand=Gu">ぐー</a>
-    <a href="/jankengame?hand=Tyoki">ちょき</a>
-    <a href="/jankengame?hand=Pa">ぱー</a>
+  <p th:if="${user2}">
+    <a th:href="@{/fight(id=${user2.id},hand=Gu)}">ぐー</a>
+    <a th:href="@{/fight(id=${user2.id},hand=Choki)}">ちょき</a>
+    <a th:href="@{/fight(id=${user2.id},hand=Pa)}">ぱー</a>
   </p>
 
   <div th:if="${janken}">
-    <div>あなたの手 [[${janken.getUserHand()}]]</div>
-    <div>相手の手 [[${janken.getEnemyHand()}]]</div>
-    <div>結果 [[${janken.battle()}]]</div>
+    <div th:if="${user1}">[[${user1.name}]]の手 [[${janken.userHand}]]</div>
+    <div th:if="${user2}">[[${user2.name}]]の手 [[${janken.enemyHand}]]</div>
+    <div>結果 [[${janken.result}]]</div>
   </div>
+
+  <a href="/janken">もどる</a>
 
 </body>
 

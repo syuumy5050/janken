@@ -1,5 +1,6 @@
 package oit.is.z1329.kaizi.janken.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
@@ -56,6 +57,25 @@ public class JankenController {
   public String match(@RequestParam Integer id, ModelMap model) {
     User user2 = userMapper.selectUserById(id);
     model.addAttribute("user2", user2);
+    return "match.html";
+  }
+
+  @GetMapping("/fight")
+  public String fight(@RequestParam Integer id, @RequestParam String hand, ModelMap model, Principal prin) {
+    User user1 = userMapper.selectUserByName(prin.getName());
+    User user2 = userMapper.selectUserById(id);
+    Janken janken = new Janken(hand);
+    Match match = new Match();
+
+    match.setUser1(user1.getId());
+    match.setUser2(user2.getId());
+    match.setUser1Hand(hand);
+    match.setUser2Hand(janken.getEnemyHand());
+    matchMapper.insertMatch(match);
+
+    model.addAttribute("user1", user1);
+    model.addAttribute("user2", user2);
+    model.addAttribute("janken", janken);
     return "match.html";
   }
 

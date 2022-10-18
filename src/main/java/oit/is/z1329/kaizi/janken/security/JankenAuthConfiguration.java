@@ -38,8 +38,13 @@ public class JankenAuthConfiguration {
         .password("$2y$10$rBcNdqeeLHRTvOri.nIQLu1DpVrCrUsGHF1JBxIC5C/gCCrrV2dCS")
         .roles("USER")
         .build();
+    UserDetails honda = users
+        .username("ほんだ")
+        .password("$2y$10$ZYDOLtm8rkJA0SsMbEd8j.uBLWS7X6a2QR4JbbJTJ4DBx5aU2zEa2")
+        .roles("USER")
+        .build();
     // 生成したユーザをImMemoryUserDetailsManagerに渡す（いくつでも良い）
-    return new InMemoryUserDetailsManager(user1, user2);
+    return new InMemoryUserDetailsManager(user1, user2, honda);
   }
 
   /**
@@ -61,6 +66,15 @@ public class JankenAuthConfiguration {
         .mvcMatchers("/janken/**").authenticated();
 
     http.logout().logoutSuccessUrl("/"); // ログアウト時は "http://localhost:8080/" に戻る
+
+    /**
+     * 以下2行はh2-consoleを利用するための設定なので，開発が完了したらコメントアウトすることが望ましい
+     * CSRFがONになっているとフォームが対応していないためアクセスできない
+     * HTTPヘッダのX-Frame-OptionsがDENYになるとiframeでlocalhostでのアプリが使えなくなるので，H2DBのWebクライアントのためだけにdisableにする必要がある
+     */
+    http.csrf().disable();
+    http.headers().frameOptions().disable();
+
     return http.build();
   }
 

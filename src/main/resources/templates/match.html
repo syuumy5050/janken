@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
+
+<head>
+  <meta charset="utf-8">
+  <title>Janken GAME!</title>
+</head>
+
+<body>
+  <a href="/logout">ログアウト</a>
+
+  <h1>Match</h1>
+
+  <h2>
+    <span sec:authentication="name" /> V.S. <span th:if="${user2}">[[${user2.name}]]</span>
+  </h2>
+
+  <p th:if="${user2}">
+    <a th:href="@{/fight(id=${user2.id},hand=Gu)}">ぐー</a>
+    <a th:href="@{/fight(id=${user2.id},hand=Choki)}">ちょき</a>
+    <a th:href="@{/fight(id=${user2.id},hand=Pa)}">ぱー</a>
+  </p>
+
+  <div th:if="${janken}">
+    <div th:if="${user1}">[[${user1.name}]]の手 [[${janken.userHand}]]</div>
+    <div th:if="${user2}">[[${user2.name}]]の手 [[${janken.enemyHand}]]</div>
+    <div>結果 [[${janken.result}]]</div>
+  </div>
+
+  <a href="/janken">もどる</a>
+
+</body>
+
+</html>

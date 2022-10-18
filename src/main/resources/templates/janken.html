@@ -11,17 +11,18 @@
 
   <h1>Janken GAME!</h1>
 
-  <div th:if="${entry}">
-    エントリー
-    <ul>
-      <li>今[[${entry.userCnt}]]人がエントリーしています</li>
-      <li th:each="user : ${entry.users}">[[${user}]]</li>
-    </ul>
-  </div>
-
   <div>
     Hi <span sec:authentication="name" />
   </div>
+
+  <p th:if="${users}">
+  <h2>エントリー</h2>
+  <div>今[[${users.size()}]]人がエントリーしています</div>
+  <ul>
+    <li th:each="user : ${users}">[[${user.name}]]</li>
+  </ul>
+  </p>
+
   <p>
     <a href="/jankengame?hand=Gu">ぐー</a>
     <a href="/jankengame?hand=Tyoki">ちょき</a>

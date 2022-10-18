@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
 
 <head>
   <meta charset="utf-8">
@@ -19,7 +19,7 @@
   <h2>エントリー</h2>
   <div>今[[${users.size()}]]人がエントリーしています</div>
   <ul>
-    <li th:each="user:${users}">[[${user.name}]]</li>
+    <li th:each="user:${users}"><a th:href="@{/match(id=${user.id})}">[[${user.name}]]</a></li>
   </ul>
   </p>
 
@@ -35,18 +35,6 @@
     </tr>
   </div>
   </p>
-
-  <p>
-    <a href="/jankengame?hand=Gu">ぐー</a>
-    <a href="/jankengame?hand=Tyoki">ちょき</a>
-    <a href="/jankengame?hand=Pa">ぱー</a>
-  </p>
-
-  <div th:if="${janken}">
-    <div>あなたの手 [[${janken.getUserHand()}]]</div>
-    <div>相手の手 [[${janken.getEnemyHand()}]]</div>
-    <div>結果 [[${janken.battle()}]]</div>
-  </div>
 
 </body>
 

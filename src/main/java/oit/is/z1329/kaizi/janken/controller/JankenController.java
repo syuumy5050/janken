@@ -1,6 +1,5 @@
 package oit.is.z1329.kaizi.janken.controller;
 
-// import java.security.Principal;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
@@ -51,6 +50,13 @@ public class JankenController {
   public String janken_post(@RequestParam String userName, ModelMap model) {
     model.addAttribute("userName", userName);
     return "janken.html";
+  }
+
+  @GetMapping("/match")
+  public String match(@RequestParam Integer id, ModelMap model) {
+    User user2 = userMapper.selectUserById(id);
+    model.addAttribute("user2", user2);
+    return "match.html";
   }
 
   @GetMapping("/jankengame")

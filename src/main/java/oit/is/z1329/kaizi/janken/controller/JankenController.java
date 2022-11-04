@@ -37,8 +37,10 @@ public class JankenController {
   @GetMapping("/janken")
   public String janken_get(ModelMap model) {
     ArrayList<User> users = userMapper.selectAllUser();
+    ArrayList<MatchInfo> matchInfo = matchInfoMapper.selectAllByIsActive(true);
     ArrayList<Match> matches = matchMapper.selectAllMatches();
     model.addAttribute("users", users);
+    model.addAttribute("matchInfo", matchInfo);
     model.addAttribute("matches", matches);
     return "janken.html";
   }
@@ -60,15 +62,15 @@ public class JankenController {
 
   @GetMapping("/match")
   public String match(@RequestParam Integer id, ModelMap model) {
-    User user2 = userMapper.selectUserById(id);
+    User user2 = userMapper.selectById(id);
     model.addAttribute("user2", user2);
     return "match.html";
   }
 
   @GetMapping("/fight")
   public String fight(@RequestParam Integer id, @RequestParam String hand, ModelMap model, Principal prin) {
-    User user1 = userMapper.selectUserByName(prin.getName());
-    User user2 = userMapper.selectUserById(id);
+    User user1 = userMapper.selectByName(prin.getName());
+    User user2 = userMapper.selectById(id);
     MatchInfo matchInfo = new MatchInfo();
 
     matchInfo.setUser1(user1.getId());

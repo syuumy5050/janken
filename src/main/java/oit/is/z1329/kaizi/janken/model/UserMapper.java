@@ -12,9 +12,9 @@ public interface UserMapper {
   ArrayList<User> selectAllUser();
 
   @Select("SELECT * FROM users WHERE id = #{id};")
-  User selectUserById(int id);
+  User selectById(int id);
 
   @Select("SELECT * FROM users WHERE name = #{name};")
-  User selectUserByName(String name);
+  User selectByName(String name);
 
 }

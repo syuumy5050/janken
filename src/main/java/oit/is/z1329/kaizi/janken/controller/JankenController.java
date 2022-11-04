@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import oit.is.z1329.kaizi.janken.model.Janken;
 import oit.is.z1329.kaizi.janken.model.Match;
+import oit.is.z1329.kaizi.janken.model.MatchInfo;
+import oit.is.z1329.kaizi.janken.model.MatchInfoMapper;
 import oit.is.z1329.kaizi.janken.model.MatchMapper;
 import oit.is.z1329.kaizi.janken.model.User;
 import oit.is.z1329.kaizi.janken.model.UserMapper;
@@ -28,6 +30,9 @@ public class JankenController {
 
   @Autowired
   MatchMapper matchMapper;
+
+  @Autowired
+  MatchInfoMapper matchInfoMapper;
 
   @GetMapping("/janken")
   public String janken_get(ModelMap model) {
@@ -64,19 +69,15 @@ public class JankenController {
   public String fight(@RequestParam Integer id, @RequestParam String hand, ModelMap model, Principal prin) {
     User user1 = userMapper.selectUserByName(prin.getName());
     User user2 = userMapper.selectUserById(id);
-    Janken janken = new Janken(hand);
-    Match match = new Match();
+    MatchInfo matchInfo = new MatchInfo();
 
-    match.setUser1(user1.getId());
-    match.setUser2(user2.getId());
-    match.setUser1Hand(hand);
-    match.setUser2Hand(janken.getEnemyHand());
-    matchMapper.insertMatch(match);
+    matchInfo.setUser1(user1.getId());
+    matchInfo.setUser2(user2.getId());
+    matchInfo.setUser1Hand(hand);
+    matchInfo.setIsActive(true);
+    matchInfoMapper.insertMatchInfo(matchInfo);
 
-    model.addAttribute("user1", user1);
-    model.addAttribute("user2", user2);
-    model.addAttribute("janken", janken);
-    return "match.html";
+    return "wait.html";
   }
 
   @GetMapping("/jankengame")

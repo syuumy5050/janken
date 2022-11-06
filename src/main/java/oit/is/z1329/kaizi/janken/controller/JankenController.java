@@ -4,10 +4,12 @@ import java.security.Principal;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import oit.is.z1329.kaizi.janken.model.Janken;
@@ -17,6 +19,7 @@ import oit.is.z1329.kaizi.janken.model.MatchInfoMapper;
 import oit.is.z1329.kaizi.janken.model.MatchMapper;
 import oit.is.z1329.kaizi.janken.model.User;
 import oit.is.z1329.kaizi.janken.model.UserMapper;
+import oit.is.z1329.kaizi.janken.service.AsyncKekka;
 import oit.is.z1329.kaizi.janken.model.Entry;
 
 @Controller
@@ -24,6 +27,9 @@ public class JankenController {
 
   @Autowired
   Entry entry;
+
+  @Autowired
+  AsyncKekka asyncKekka;
 
   @Autowired
   UserMapper userMapper;
@@ -68,18 +74,47 @@ public class JankenController {
   }
 
   @GetMapping("/fight")
+  @Transactional
   public String fight(@RequestParam Integer id, @RequestParam String hand, ModelMap model, Principal prin) {
     User user1 = userMapper.selectByName(prin.getName());
     User user2 = userMapper.selectById(id);
-    MatchInfo matchInfo = new MatchInfo();
 
-    matchInfo.setUser1(user1.getId());
-    matchInfo.setUser2(user2.getId());
-    matchInfo.setUser1Hand(hand);
-    matchInfo.setIsActive(true);
-    matchInfoMapper.insertMatchInfo(matchInfo);
+    boolean isFindMatchInfo = false;
+
+    System.out.println("fight1");
+    ArrayList<MatchInfo> matchInfos = matchInfoMapper.selectAllByIsActive(true);
+    for (MatchInfo mi : matchInfos) {
+      if (mi.getUser1() == user2.getId()
+          && mi.getUser2() == user1.getId()) {
+        System.out.println("fight2");
+        asyncKekka.syncInsertMatch(mi, hand, true);
+        mi.setIsActive(false);
+        matchInfoMapper.updateById(mi);
+        isFindMatchInfo = true;
+      }
+    }
+
+    System.out.println("fight3");
+    if (!isFindMatchInfo) {
+      System.out.println("fight4");
+      MatchInfo matchInfo = new MatchInfo();
+      matchInfo.setUser1(user1.getId());
+      matchInfo.setUser2(user2.getId());
+      matchInfo.setUser1Hand(hand);
+      matchInfo.setIsActive(true);
+      matchInfoMapper.insertMatchInfo(matchInfo);
+    }
 
     return "wait.html";
+  }
+
+  @GetMapping("/wait")
+  public SseEmitter waitEmitter() {
+    System.out.println("wait1");
+    final SseEmitter sseEmitter = new SseEmitter();
+    asyncKekka.asyncShowMatch(sseEmitter);
+    System.out.println("wait2");
+    return sseEmitter;
   }
 
   @GetMapping("/jankengame")

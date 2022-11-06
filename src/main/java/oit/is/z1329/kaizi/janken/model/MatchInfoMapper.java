@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface MatchInfoMapper {
@@ -20,4 +21,9 @@ public interface MatchInfoMapper {
   @Select("SELECT * FROM matchinfo WHERE isActive = #{isActive};")
   ArrayList<MatchInfo> selectAllByIsActive(boolean isActive);
 
+  @Select("SELECT * FROM matchinfo WHERE user1 = #{user1} AND user2 = #{user2} AND isActive = #{isActive}")
+  ArrayList<MatchInfo> selectMatchInfo(int user1, int user2, boolean isActive);
+
+  @Update("UPDATE matchinfo SET user1 = #{user1}, user2 = #{user2}, isActive = #{isActive} WHERE id = #{id};")
+  void updateById(MatchInfo matchInfo);
 }

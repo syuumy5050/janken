@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
+
+<head>
+  <meta charset="utf-8">
+  <title>Janken GAME!</title>
+  <script>
+    window.onload = function () {
+      var sse = new EventSource('/wait');
+      sse.onmessage = function (event) {
+        console.log("sse.onmessage")
+        console.log(event.data);
+        var kekka_object = JSON.parse(event.data);//JSONオブジェクトとしてparse
+        var kekka_table = "";
+        // DBに残っているフルーツのリストがJSONオブジェクトとして得られるので，htmlを作成し，tbodyの中身毎入れ替える
+        var matchtxt = "<td>Match:</td>"
+        var id = "<td>id:" + kekka_object.id + "</td>";
+        var user1 = "<td>user1:" + kekka_object.user1 + "</td>";
+        var user2 = "<td>user2:" + kekka_object.user2 + "</td>";
+        var user1Hand = "<td>user1Hand:" + kekka_object.user1Hand + "</td>";
+        var user2Hand = "<td>user2Hand:" + kekka_object.user2Hand + "</td>";
+        kekka_table = kekka_table + "<table><tr>" + matchtxt + id + user1 + user2 + user1Hand + user2Hand + "</tr></table>";
+        console.log(kekka_table);
+        var kekka_head = "<h2>結果</h2>"
+        var janken_link = "<div><a href='/janken'>もどる</a></div>"
+        var kekkaDiv = document.getElementById("kekka");
+        kekkaDiv.innerHTML = kekka_head + kekka_table + janken_link;
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h1>相手の手を待ってます</h1>
+
+  <div>
+    Hi <span sec:authentication="name" />
+  </div>
+
+  <div id="kekka"></div>
+
+</body>
+
+</html>

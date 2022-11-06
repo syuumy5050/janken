@@ -43,8 +43,13 @@ public class JankenAuthConfiguration {
         .password("$2y$10$ZYDOLtm8rkJA0SsMbEd8j.uBLWS7X6a2QR4JbbJTJ4DBx5aU2zEa2")
         .roles("USER")
         .build();
+    UserDetails igaki = users
+        .username("いがき")
+        .password("$2y$10$OHxH06O3ciJWPPJrzcbyy.eaQdq2aKXuN3YyC/bEo4Pr8GRRmmJsW")
+        .roles("USER")
+        .build();
     // 生成したユーザをImMemoryUserDetailsManagerに渡す（いくつでも良い）
-    return new InMemoryUserDetailsManager(user1, user2, honda);
+    return new InMemoryUserDetailsManager(user1, user2, honda, igaki);
   }
 
   /**

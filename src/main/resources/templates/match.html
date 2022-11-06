@@ -21,12 +21,6 @@
     <a th:href="@{/fight(id=${user2.id},hand=Pa)}">ぱー</a>
   </p>
 
-  <div th:if="${janken}">
-    <div th:if="${user1}">[[${user1.name}]]の手 [[${janken.userHand}]]</div>
-    <div th:if="${user2}">[[${user2.name}]]の手 [[${janken.enemyHand}]]</div>
-    <div>結果 [[${janken.result}]]</div>
-  </div>
-
   <a href="/janken">もどる</a>
 
 </body>
